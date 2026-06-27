@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Kanban — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">📋</div>
+<h1 class="page-title">Kanban</h1>
+
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:start;">
+
+  {% macro col(nombre, items, estado, dot_color) %}
+  <div ondragover="onDragOver(event,'{{ estado }}')" ondrop="onDrop(event,'{{ estado }}')" ondragleave="onDragLeave(event,'{{ estado }}')">
+
+    <!-- Header columna -->
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding:0 2px;">
+      <span style="width:8px; height:8px; border-radius:50%; background:{{ dot_color }}; flex-shrink:0;"></span>
+      <span style="font-size:12px; font-weight:600; color:rgba(55,53,47,0.5);">{{ nombre }}</span>
+      <span style="font-size:12px; color:rgba(55,53,47,0.3); margin-left:2px;">{{ items|length }}</span>
+    </div>
+
+    <!-- Cards -->
+    <div id="drop-{{ estado }}" style="min-height:60px; border-radius:4px; border:2px dashed transparent; transition:border-color 0.1s, background 0.1s; padding:1px;">
+      {% for t in items %}
+      <div class="k-card" draggable="true" data-id="{{ t.id }}" data-prioridad="{{ t.prioridad }}"
+           ondragstart="onDragStart(event)" ondragend="onDragEnd(event)">
+        <div style="font-size:14px; font-weight:500; margin-bottom:6px; line-height:1.4; {{ 'text-decoration:line-through;color:rgba(55,53,47,0.35);' if t.completada }}">
+          {{ t.titulo }}{% if t.recurrente %}<span style="font-size:11px;color:#2383e2;margin-left:5px;">↻</span>{% endif %}
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:4px;">
+          <span class="n-tag tag-{{ t.categoria }}">{{ t.categoria }}</span>
+          <span class="n-tag tag-{{ t.prioridad }}">{{ t.prioridad }}</span>
+          {% if t.fecha_limite %}<span style="font-size:11px;color:rgba(55,53,47,0.4);">{{ t.fecha_limite }}</span>{% endif %}
+        </div>
+        <!-- acciones hover -->
+        <div class="k-actions">
+          {% if estado == 'pendiente' %}
+            <button class="k-action-btn" onclick="moverTarea({{ t.id }},'en_progreso')">→ Progreso</button>
+            <button class="k-action-btn" style="color:#448361;" onclick="moverTarea({{ t.id }},'hecho')">✓ Hecho</button>
+          {% elif estado == 'en_progreso' %}
+            <button class="k-action-btn" onclick="moverTarea({{ t.id }},'pendiente')">← Pendiente</button>
+            <button class="k-action-btn" style="color:#448361;" onclick="moverTarea({{ t.id }},'hecho')">✓ Hecho</button>
+          {% else %}
+            <button class="k-action-btn" onclick="moverTarea({{ t.id }},'pendiente')">↩ Reabrir</button>
+          {% endif %}
+          <form method="POST" action="/api/tarea/{{ t.id }}/borrar" style="display:inline; margin-left:auto;">
+            <button type="submit" class="k-action-btn" style="color:rgba(55,53,47,0.3);">✕</button>
+          </form>
+        </div>
+      </div>
+      {% else %}
+      <div style="text-align:center; color:rgba(55,53,47,0.25); font-size:13px; padding:24px 0; border:1.5px dashed rgba(55,53,47,0.1); border-radius:4px;">
+        Sin tarjetas
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endmacro %}
+
+  {{ col('Pendiente',   pendiente,   'pendiente',   '#d9730d') }}
+  {{ col('En progreso', en_progreso, 'en_progreso', '#2383e2') }}
+  {{ col('Completado',  hecho,       'hecho',       '#448361') }}
+
+</div>
+
+<style>
+  .k-card {
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(55,53,47,0.09);
+    box-shadow: 0 1px 2px rgba(55,53,47,0.04);
+    cursor: grab;
+    user-select: none;
+    transition: box-shadow 0.1s;
+    position: relative;
+  }
+  .k-card:hover { box-shadow: 0 2px 8px rgba(55,53,47,0.10); }
+  .k-card:active { cursor: grabbing; }
+  .k-card.dragging { opacity: 0.35; }
+
+  .k-actions {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .k-card:hover .k-actions { display: flex; }
+
+  .k-action-btn {
+    font-size: 12px; font-family: inherit; font-weight: 500;
+    background: rgba(55,53,47,0.06); border: none; border-radius: 3px;
+    padding: 2px 8px; cursor: pointer; color: rgba(55,53,47,0.6);
+    transition: background 0.1s;
+  }
+  .k-action-btn:hover { background: rgba(55,53,47,0.12); }
+</style>
+
+{% endblock %}
+{% block scripts %}
+<script>
+let draggingId = null;
+function onDragStart(e) {
+  draggingId = e.currentTarget.dataset.id;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragEnd(e) {
+  e.currentTarget.classList.remove('dragging');
+  document.querySelectorAll('[id^=drop-]').forEach(d => {
+    d.style.borderColor = 'transparent';
+    d.style.background = '';
+  });
+}
+function onDragOver(e, estado) {
+  e.preventDefault();
+  const drop = document.getElementById('drop-' + estado);
+  drop.style.borderColor = 'rgba(35,131,226,0.4)';
+  drop.style.background = 'rgba(35,131,226,0.03)';
+}
+function onDragLeave(e, estado) {
+  if (!e.currentTarget.contains(e.relatedTarget)) {
+    const drop = document.getElementById('drop-' + estado);
+    drop.style.borderColor = 'transparent';
+    drop.style.background = '';
+  }
+}
+function onDrop(e, estado) {
+  e.preventDefault();
+  if (draggingId) moverTarea(draggingId, estado);
+}
+function moverTarea(id, estado) {
+  const fd = new FormData();
+  fd.append('estado', estado);
+  fetch(`/api/tarea/${id}/mover`, { method:'POST', body:fd })
+    .then(r => r.json())
+    .then(d => { if (d.ok) { showToast('Movido'); setTimeout(() => location.reload(), 350); } });
+}
+</script>
+{% endblock %}

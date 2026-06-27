@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Tareas — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">✅</div>
+<h1 class="page-title">Tareas del hogar</h1>
+
+<!-- FILTROS -->
+<div style="display:flex; flex-wrap:wrap; gap:2px; margin-bottom:20px; align-items:center;">
+  <a href="/tareas" class="f-btn {{ 'f-btn-active' if not filtro_cat and not filtro_pri }}">Todas</a>
+  {% for c in categorias %}
+    <a href="/tareas?categoria={{ c }}{% if filtro_pri %}&prioridad={{ filtro_pri }}{% endif %}"
+       class="f-btn {{ 'f-btn-active' if filtro_cat==c }}">{{ c|capitalize }}</a>
+  {% endfor %}
+  <span style="color:rgba(55,53,47,0.15); padding:0 6px; font-size:13px;">|</span>
+  {% for p in prioridades %}
+    <a href="/tareas?prioridad={{ p }}{% if filtro_cat %}&categoria={{ filtro_cat }}{% endif %}"
+       class="f-btn {{ 'f-btn-active' if filtro_pri==p }}">{{ p|capitalize }}</a>
+  {% endfor %}
+</div>
+
+<!-- LISTA -->
+{% for t in tareas %}
+<div class="n-row" style="{{ 'opacity:0.38;' if t.completada }}">
+  <form method="POST" action="/api/tarea/{{ t.id }}/completar" style="flex-shrink:0;">
+    <button type="submit" class="check-btn {{ 'checked' if t.completada }}" title="Completar"></button>
+  </form>
+  <span style="flex:1; font-size:14px; {{ 'text-decoration:line-through; color:rgba(55,53,47,0.35);' if t.completada }}">
+    {{ t.titulo }}
+    {% if t.recurrente %}<span style="font-size:11px; color:#2383e2; margin-left:6px; font-weight:500;">↻ {{ t.dias_recurrencia }}d</span>{% endif %}
+  </span>
+  {% if t.fecha_limite and not t.completada %}
+    <span style="font-size:12px; color:rgba(55,53,47,0.4);">{{ t.fecha_limite }}</span>
+  {% endif %}
+  <span class="n-tag tag-{{ t.categoria }}">{{ t.categoria }}</span>
+  <span class="n-tag tag-{{ t.prioridad }}">{{ t.prioridad }}</span>
+  <form method="POST" action="/api/tarea/{{ t.id }}/borrar" style="flex-shrink:0;" class="del-form">
+    <button type="submit" class="del-btn" title="Borrar">✕</button>
+  </form>
+</div>
+{% else %}
+{% if filtro_cat or filtro_pri %}
+<p style="color:rgba(55,53,47,0.35); font-size:14px; padding:8px 0;">Sin tareas con este filtro.</p>
+{% endif %}
+{% endfor %}
+
+<!-- FILA INLINE NUEVA TAREA -->
+<div id="row-add-trigger" class="n-row" style="cursor:pointer; color:rgba(55,53,47,0.4);" onclick="abrirNueva()">
+  <span style="width:18px; height:18px; border:1.5px solid rgba(55,53,47,0.25); border-radius:50%; flex-shrink:0;"></span>
+  <span style="font-size:14px;">Nueva tarea</span>
+</div>
+
+<form id="form-nueva" method="POST" action="/tareas/nueva" style="display:none;">
+  <div class="n-row" style="align-items:center; gap:6px; padding:4px 0; flex-wrap:wrap;">
+    <span style="width:18px; height:18px; border:1.5px solid #2383e2; border-radius:50%; flex-shrink:0;"></span>
+    <input id="input-titulo" class="inline-input" type="text" name="titulo"
+           placeholder="Escribe una tarea..." required autofocus
+           style="flex:1; min-width:160px; font-size:14px; border:none; outline:none; background:transparent; color:#37352f; padding:0;">
+    <!-- propiedades inline -->
+    <div class="inline-props" id="inline-props" style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+      <select name="categoria" class="inline-select" title="Categoría">
+        {% for c in categorias %}<option value="{{ c }}">{{ c|capitalize }}</option>{% endfor %}
+      </select>
+      <select name="prioridad" class="inline-select" title="Prioridad">
+        {% for p in prioridades %}<option value="{{ p }}" {{ 'selected' if p=='normal' }}>{{ p|capitalize }}</option>{% endfor %}
+      </select>
+      <input type="date" name="fecha_limite" class="inline-select" title="Fecha límite" style="width:130px;">
+      <label style="display:flex; align-items:center; gap:4px; font-size:12px; color:rgba(55,53,47,0.5); cursor:pointer; white-space:nowrap;">
+        <input type="checkbox" name="recurrente" id="chk-rec" onchange="toggleRec()" style="margin:0;"> Cada
+        <input type="number" name="dias_recurrencia" id="rec-days" min="1" max="365" value="7"
+               class="inline-select" style="width:48px; display:none;"> días
+      </label>
+    </div>
+    <button type="submit" class="n-btn n-btn-primary n-btn-sm">Añadir</button>
+    <button type="button" class="n-btn n-btn-ghost n-btn-sm" onclick="cerrarNueva()">✕</button>
+  </div>
+</form>
+
+<style>
+  .f-btn {
+    display: inline-flex; align-items: center;
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 14px; color: rgba(55,53,47,0.65);
+    text-decoration: none; cursor: pointer;
+    transition: background 80ms;
+    white-space: nowrap;
+  }
+  .f-btn:hover { background: rgba(55,53,47,0.08); color: #37352f; }
+  .f-btn-active { background: rgba(55,53,47,0.08); color: #37352f; font-weight: 500; }
+
+  .check-btn {
+    width: 18px; height: 18px;
+    border: 1.5px solid rgba(55,53,47,0.25);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: border-color 0.1s, background 0.1s;
+  }
+  .check-btn:hover { border-color: #2383e2; background: rgba(35,131,226,0.08); }
+  .check-btn.checked { background: rgba(55,53,47,0.15); border-color: rgba(55,53,47,0.2); }
+
+  .del-btn {
+    font-size: 11px; color: rgba(55,53,47,0.3);
+    background: transparent; border: none; cursor: pointer;
+    padding: 2px 4px; border-radius: 3px;
+    opacity: 0; transition: opacity 0.1s;
+  }
+  .n-row:hover .del-btn { opacity: 1; }
+  .del-btn:hover { color: #d44c47; background: rgba(212,76,71,0.08); }
+
+  .inline-select {
+    font-size: 12px; font-family: inherit;
+    border: 1px solid rgba(55,53,47,0.15);
+    border-radius: 4px; padding: 3px 6px;
+    background: rgba(55,53,47,0.04);
+    color: rgba(55,53,47,0.7);
+    cursor: pointer;
+  }
+  .inline-select:focus { outline: none; border-color: #2383e2; }
+
+  #row-add-trigger:hover { background: rgba(55,53,47,0.04); }
+  #row-add-trigger:hover span:first-child { border-color: rgba(55,53,47,0.4); }
+</style>
+
+{% endblock %}
+{% block scripts %}
+<script>
+function abrirNueva() {
+  document.getElementById('row-add-trigger').style.display = 'none';
+  document.getElementById('form-nueva').style.display = 'block';
+  document.getElementById('input-titulo').focus();
+}
+function cerrarNueva() {
+  document.getElementById('form-nueva').style.display = 'none';
+  document.getElementById('row-add-trigger').style.display = 'flex';
+}
+function toggleRec() {
+  document.getElementById('rec-days').style.display =
+    document.getElementById('chk-rec').checked ? 'inline-block' : 'none';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') cerrarNueva();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}Calendario — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">📅</div>
+<h1 class="page-title">Calendario</h1>
+
+<!-- NAV MES -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+  <a href="/calendario?year={{ prev_year }}&month={{ prev_month }}" class="n-btn n-btn-ghost n-btn-sm">←</a>
+  <span style="font-size:16px; font-weight:600; min-width:140px;">{{ mes_nombre }} {{ year }}</span>
+  <a href="/calendario?year={{ next_year }}&month={{ next_month }}" class="n-btn n-btn-ghost n-btn-sm">→</a>
+  <button class="n-btn n-btn-ghost n-btn-sm" style="margin-left:auto; font-size:12px;" onclick="exportar()">📤 Exportar</button>
+</div>
+
+<!-- CALENDARIO FULL WIDTH GRID -->
+<div style="border:1px solid rgba(55,53,47,0.09); border-radius:6px; overflow:hidden; margin-bottom:32px;">
+
+  <!-- Cabecera días -->
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); border-bottom:1px solid rgba(55,53,47,0.09);">
+    {% for nombre in ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'] %}
+    <div style="text-align:center; font-size:11px; font-weight:600; color:rgba(55,53,47,0.4); padding:8px 0; letter-spacing:0.04em; text-transform:uppercase;
+                {{ 'color:rgba(55,53,47,0.25);' if loop.index >= 6 }}">{{ nombre }}</div>
+    {% endfor %}
+  </div>
+
+  <!-- Semanas -->
+  {% for semana in cal %}
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); border-bottom:1px solid rgba(55,53,47,0.06);">
+    {% for dia in semana %}
+    {% if dia == 0 %}
+      <div style="min-height:80px; background:rgba(55,53,47,0.015);"></div>
+    {% else %}
+      {% set fecha_str = '%04d-%02d-%02d'|format(year, month, dia) %}
+      {% set es_hoy = (hoy.year==year and hoy.month==month and hoy.day==dia) %}
+      {% set sel = (fecha_sel==fecha_str) %}
+      {% set tiene = (dia in dias_eventos) %}
+      {% set es_weekend = (loop.index >= 6) %}
+      <div onclick="selDia('{{ fecha_str }}')" style="min-height:80px; padding:6px 8px; cursor:pointer;
+           border-right:1px solid rgba(55,53,47,0.06); transition:background 0.08s;
+           {{ 'background:rgba(55,53,47,0.015);' if es_weekend }}
+           {{ 'background:rgba(35,131,226,0.05);' if sel }}"
+           onmouseover="this.style.background='rgba(55,53,47,0.04)'"
+           onmouseout="this.style.background='{{ 'rgba(35,131,226,0.05)' if sel else ('rgba(55,53,47,0.015)' if es_weekend else '') }}'">
+        <!-- Número del día -->
+        <div style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:13px; font-weight:{{ '600' if es_hoy else '400' }};
+             {{ 'background:#37352f; color:#fff;' if es_hoy else ('color:rgba(55,53,47,0.35);' if es_weekend else 'color:#37352f;') }}">{{ dia }}</div>
+        <!-- Eventos del día -->
+        {% for e in eventos %}
+          {% if e.fecha == fecha_str %}
+          <div style="margin-top:3px; font-size:11px; font-weight:500; padding:1px 5px; border-radius:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+               background:{{ '#fdeece' if e.tipo=='recordatorio' else ('#fbe4e4' if e.tipo=='cita' else '#e8eaf6') }};
+               color:{{ '#d9730d' if e.tipo=='recordatorio' else ('#d44c47' if e.tipo=='cita' else '#3949ab') }};">
+            {% if e.hora %}{{ e.hora[:5] }} {% endif %}{{ e.titulo }}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+</div>
+
+<!-- LISTA EVENTOS + INLINE ADD -->
+<p style="font-size:12px; font-weight:600; color:rgba(55,53,47,0.4); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">
+  Eventos de {{ mes_nombre }} {{ year }}
+</p>
+
+{% for e in eventos %}
+<div class="n-row">
+  <span style="font-size:12px; color:rgba(55,53,47,0.4); min-width:64px; flex-shrink:0;">
+    {{ e.fecha.split('-')[2]|int }} {{ mes_nombre[:3] }}{% if e.hora %} · {{ e.hora[:5] }}{% endif %}
+  </span>
+  <span style="flex:1; font-size:14px;">{{ e.titulo }}{% if e.descripcion %}<span style="font-size:12px; color:rgba(55,53,47,0.4); margin-left:8px;">{{ e.descripcion }}</span>{% endif %}</span>
+  <span class="n-tag tag-{{ e.tipo }}">{{ e.tipo }}</span>
+  <form method="POST" action="/api/evento/{{ e.id }}/borrar" style="flex-shrink:0;">
+    <button type="submit" class="del-btn">✕</button>
+  </form>
+</div>
+{% else %}
+<p style="color:rgba(55,53,47,0.3); font-size:14px; padding:4px 0;">Sin eventos este mes.</p>
+{% endfor %}
+
+<!-- FILA INLINE NUEVO EVENTO -->
+<div id="row-add-trigger" class="n-row" style="cursor:pointer; color:rgba(55,53,47,0.4); margin-top:4px;" onclick="abrirNuevo()">
+  <span style="font-size:16px; width:18px; text-align:center; color:rgba(55,53,47,0.3);">+</span>
+  <span style="font-size:14px;">Nuevo evento</span>
+</div>
+
+<form id="form-nuevo" method="POST" action="/calendario/nuevo-evento" style="display:none;">
+  <div class="n-row" style="gap:6px; flex-wrap:wrap; align-items:center;">
+    <span style="font-size:16px; width:18px; text-align:center; color:#2383e2;">+</span>
+    <input id="input-titulo" type="text" name="titulo" placeholder="Título del evento..." required autofocus
+           style="flex:1; min-width:160px; font-size:14px; border:none; outline:none; background:transparent; color:#37352f; padding:0;">
+    <input type="date" name="fecha" id="input-fecha" value="{{ fecha_sel or '' }}" required class="inline-select">
+    <input type="time" name="hora" class="inline-select" style="width:100px;">
+    <select name="tipo" class="inline-select">
+      {% for t in tipos %}<option value="{{ t }}">{{ t|capitalize }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="n-btn n-btn-primary n-btn-sm">Añadir</button>
+    <button type="button" class="n-btn n-btn-ghost n-btn-sm" onclick="cerrarNuevo()">✕</button>
+  </div>
+</form>
+
+{% if tareas_recurrentes %}
+<div style="height:1px; background:rgba(55,53,47,0.09); margin:24px 0 16px;"></div>
+<p style="font-size:12px; font-weight:600; color:rgba(55,53,47,0.4); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">↻ Tareas recurrentes</p>
+{% for t in tareas_recurrentes %}
+<div class="n-row">
+  <span style="font-size:12px; color:rgba(55,53,47,0.4); min-width:64px;">Cada {{ t.dias_recurrencia }}d</span>
+  <span style="flex:1; font-size:14px;">{{ t.titulo }}</span>
+  <span class="n-tag tag-{{ t.categoria }}">{{ t.categoria }}</span>
+</div>
+{% endfor %}
+{% endif %}
+
+<!-- MODAL EXPORTAR -->
+<div id="modal-exportar" class="n-modal-overlay">
+  <div class="n-modal">
+    <h3>📤 Exportar para IA</h3>
+    <p style="font-size:13px; color:rgba(55,53,47,0.45); margin-bottom:12px;">Pega en Claude: <em>"Crea estos eventos en Google Calendar"</em></p>
+    <div id="export-contenido" style="background:rgba(55,53,47,0.03); border:1px solid rgba(55,53,47,0.09); border-radius:4px; padding:12px; font-size:12px; font-family:monospace; white-space:pre-wrap; max-height:220px; overflow-y:auto; margin-bottom:16px; line-height:1.6;">Cargando...</div>
+    <div style="display:flex; justify-content:flex-end; gap:8px;">
+      <button class="n-btn n-btn-ghost" onclick="cerrarModal()">Cerrar</button>
+      <button class="n-btn n-btn-primary" onclick="copiarTexto()">📋 Copiar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .del-btn { font-size:11px; color:rgba(55,53,47,0.3); background:transparent; border:none; cursor:pointer; padding:2px 4px; border-radius:3px; opacity:0; }
+  .n-row:hover .del-btn { opacity:1; }
+  .del-btn:hover { color:#d44c47; background:rgba(212,76,71,0.08); }
+  .inline-select { font-size:12px; font-family:inherit; border:1px solid rgba(55,53,47,0.15); border-radius:4px; padding:3px 6px; background:rgba(55,53,47,0.04); color:rgba(55,53,47,0.7); cursor:pointer; }
+  .inline-select:focus { outline:none; border-color:#2383e2; }
+  #row-add-trigger:hover { background:rgba(55,53,47,0.04); }
+</style>
+
+{% endblock %}
+{% block scripts %}
+<script>
+function selDia(fecha) {
+  document.getElementById('input-fecha') && (document.getElementById('input-fecha').value = fecha);
+  abrirNuevo();
+}
+function abrirNuevo() {
+  document.getElementById('row-add-trigger').style.display = 'none';
+  document.getElementById('form-nuevo').style.display = 'block';
+  document.getElementById('input-titulo').focus();
+}
+function cerrarNuevo() {
+  document.getElementById('form-nuevo').style.display = 'none';
+  document.getElementById('row-add-trigger').style.display = 'flex';
+}
+function exportar() {
+  fetch('/api/exportar/{{ year }}/{{ month }}').then(r=>r.json()).then(data => {
+    document.getElementById('export-contenido').textContent = data.texto;
+    document.getElementById('modal-exportar').classList.add('open');
+  });
+}
+function cerrarModal() { document.getElementById('modal-exportar').classList.remove('open'); }
+function copiarTexto() {
+  navigator.clipboard.writeText(document.getElementById('export-contenido').textContent).then(()=>showToast('¡Copiado!'));
+}
+document.getElementById('modal-exportar').addEventListener('click', e => { if(e.target===document.getElementById('modal-exportar')) cerrarModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') { cerrarNuevo(); cerrarModal(); } });
+</script>
+{% endblock %}

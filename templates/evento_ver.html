@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ evento.titulo }} — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-topbar">
+  <form method="POST" action="/api/evento/{{ evento.id }}/borrar">
+    <button type="submit" class="topbar-btn topbar-btn-danger" title="Borrar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+  </form>
+</div>
+
+<div class="page-icon">📅</div>
+<h1 class="page-title" id="ev-titulo" contenteditable="true" spellcheck="false"
+    style="outline:none; cursor:text;">{{ evento.titulo }}</h1>
+
+<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+  <select id="ev-tipo" class="n-input" style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+    {% for t in tipos %}<option value="{{ t }}" {{ 'selected' if evento.tipo==t }}>{{ t|capitalize }}</option>{% endfor %}
+  </select>
+  <input type="date" id="ev-fecha" class="n-input" value="{{ evento.fecha or '' }}"
+         style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+  <input type="time" id="ev-hora" class="n-input" value="{{ evento.hora or '' }}"
+         style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+</div>
+
+<div id="editor-wrap">
+  <textarea id="editor-contenido">{{ evento.descripcion or '' }}</textarea>
+</div>
+
+<form id="form-guardar" method="POST" action="/eventos/{{ evento.id }}/editar" style="display:none;">
+  <input type="hidden" name="titulo"      id="f-titulo">
+  <input type="hidden" name="tipo"        id="f-tipo">
+  <input type="hidden" name="fecha"       id="f-fecha">
+  <input type="hidden" name="hora"        id="f-hora">
+  <input type="hidden" name="descripcion" id="f-desc">
+</form>
+
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<style>
+  .EasyMDEContainer .CodeMirror {
+    font-family: ui-sans-serif, -apple-system, sans-serif;
+    font-size: 15px; line-height: 1.7;
+    border: none; border-radius: 0; background: transparent; color: #37352f;
+    padding: 0; min-height: 300px; box-shadow: none;
+  }
+  .EasyMDEContainer .CodeMirror.CodeMirror-focused { box-shadow: none; }
+  .EasyMDEContainer .editor-toolbar {
+    border: none; border-bottom: 1px solid rgba(55,53,47,0.09);
+    border-radius: 0; background: transparent; opacity: 1; padding: 2px 0; margin-bottom: 16px;
+  }
+  .EasyMDEContainer .editor-toolbar button { color: rgba(55,53,47,0.5) !important; border-radius: 3px; }
+  .EasyMDEContainer .editor-toolbar button:hover,
+  .EasyMDEContainer .editor-toolbar button.active { background: rgba(55,53,47,0.08) !important; border-color: transparent !important; }
+  .EasyMDEContainer .editor-toolbar i.separator { border-color: rgba(55,53,47,0.12); }
+  .EasyMDEContainer .editor-preview { font-family: ui-sans-serif, -apple-system, sans-serif; font-size: 15px; color: #37352f; background: #fff; padding: 0 4px; line-height: 1.7; }
+  #ev-titulo:empty:before { content: 'Sin título'; color: rgba(55,53,47,0.3); }
+</style>
+<script>
+const mde = new EasyMDE({
+  element: document.getElementById('editor-contenido'),
+  spellChecker: false,
+  toolbar: ['bold','italic','heading','|','unordered-list','ordered-list','|','link','quote','code','|','preview'],
+  status: false,
+  autosave: { enabled: false },
+});
+mde.togglePreview();
+
+function guardar() {
+  document.getElementById('f-titulo').value = document.getElementById('ev-titulo').innerText.trim();
+  document.getElementById('f-tipo').value   = document.getElementById('ev-tipo').value;
+  document.getElementById('f-fecha').value  = document.getElementById('ev-fecha').value;
+  document.getElementById('f-hora').value   = document.getElementById('ev-hora').value;
+  document.getElementById('f-desc').value   = mde.value();
+  document.getElementById('form-guardar').submit();
+}
+
+document.getElementById('ev-titulo').addEventListener('blur', guardar);
+['ev-tipo','ev-fecha','ev-hora'].forEach(id =>
+  document.getElementById(id).addEventListener('change', guardar));
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); guardar(); }
+});
+window.addEventListener('beforeunload', guardar);
+</script>
+{% endblock %}

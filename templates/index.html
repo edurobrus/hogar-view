@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Inicio — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">🏠</div>
+<h1 class="page-title">
+  {{ hoy.strftime('%d de') }} {{ ['','enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][hoy.month] }} {{ hoy.year }}
+</h1>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;">
+
+  <!-- TAREAS HOY -->
+  <div>
+    <p class="block-h2">Tareas para hoy</p>
+    {% if tareas_hoy %}
+      {% for t in tareas_hoy %}
+      <div class="n-row">
+        <form method="POST" action="/api/tarea/{{ t.id }}/completar" style="flex-shrink:0;">
+          <button class="n-btn n-btn-ghost n-btn-sm" style="width:22px; padding:0; justify-content:center; color:rgba(55,53,47,0.35); font-size:15px;">○</button>
+        </form>
+        <span style="flex:1; font-size:14px;">{{ t.titulo }}{% if t.recurrente %}<span style="font-size:11px; color:#2383e2; margin-left:6px;">↻</span>{% endif %}</span>
+        <span class="n-tag tag-{{ t.categoria }}">{{ t.categoria }}</span>
+        <span class="n-tag tag-{{ t.prioridad }}">{{ t.prioridad }}</span>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="n-empty" style="padding:24px 0; text-align:left; color:rgba(55,53,47,0.35);">Sin tareas pendientes 🎉</p>
+    {% endif %}
+    <div class="n-divider"></div>
+    <a href="/tareas" class="n-btn n-btn-ghost n-btn-sm" style="margin-top:4px;">Ver todas las tareas →</a>
+  </div>
+
+  <!-- MINI CALENDARIO -->
+  <div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <p class="block-h2" style="margin:0;">{{ mes_nombre }} {{ year }}</p>
+      <a href="/calendario" class="n-btn n-btn-ghost n-btn-sm">Abrir →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:1px;">
+      {% for n in ['L','M','X','J','V','S','D'] %}
+        <div style="text-align:center; font-size:11px; font-weight:500; color:rgba(55,53,47,0.4); padding:3px 0;">{{ n }}</div>
+      {% endfor %}
+      {% for semana in cal %}
+        {% for dia in semana %}
+          {% if dia == 0 %}
+            <div></div>
+          {% else %}
+            {% set es_hoy = (dia == hoy.day) %}
+            {% set tiene = (dia in dias_eventos or dia in dias_tareas) %}
+            <a href="/calendario?year={{ year }}&month={{ month }}&fecha={{ '%04d-%02d-%02d'|format(year, month, dia) }}"
+               style="text-align:center; padding:4px 2px; border-radius:3px; font-size:13px; text-decoration:none; display:flex; flex-direction:column; align-items:center; transition:background 80ms;
+               background:{{ '#37352f' if es_hoy else 'transparent' }}; color:{{ '#fff' if es_hoy else '#37352f' }}; font-weight:{{ '600' if es_hoy else '400' }};"
+               onmouseover="if(!this.style.background.includes('37352f')) this.style.background='rgba(55,53,47,0.06)'"
+               onmouseout="if(!this.style.background.includes('37352f')) this.style.background='transparent'">
+              {{ dia }}
+              {% if tiene %}<span style="width:3px;height:3px;border-radius:50%;margin-top:1px; background:{{ '#fff' if es_hoy else '#2383e2' }};"></span>{% endif %}
+            </a>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+{% if pendientes_compra > 0 %}
+<div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(55,53,47,0.03); border-radius:4px; border:1px solid rgba(55,53,47,0.09);">
+  <span>🛒</span>
+  <span style="flex:1; font-size:14px; color:rgba(55,53,47,0.7);"><strong style="color:#37352f;">{{ pendientes_compra }}</strong> producto{{ 's' if pendientes_compra != 1 }} pendiente{{ 's' if pendientes_compra != 1 }} en la lista de la compra</span>
+  <a href="/compras" class="n-btn n-btn-ghost n-btn-sm">Ver →</a>
+</div>
+{% endif %}
+
+{% endblock %}

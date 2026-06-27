@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}{{ tarea.titulo }} — Mi Apartamento{% endblock %}
+{% block content %}
+
+<!-- Topbar acciones -->
+<div class="page-topbar">
+  {% if not tarea.completada %}
+  <form method="POST" action="/api/tarea/{{ tarea.id }}/completar">
+    <button type="submit" class="topbar-btn" title="Completar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </form>
+  {% endif %}
+  <form method="POST" action="/api/tarea/{{ tarea.id }}/borrar">
+    <button type="submit" class="topbar-btn topbar-btn-danger" title="Borrar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+  </form>
+</div>
+
+<div class="page-icon">{{ '✅' if tarea.completada else '📋' }}</div>
+<h1 class="page-title" id="t-titulo" contenteditable="true" spellcheck="false"
+    style="outline:none; cursor:text;">{{ tarea.titulo }}</h1>
+
+<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:32px;">
+  <select id="t-categoria" class="n-input" style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+    {% for c in categorias %}<option value="{{ c }}" {{ 'selected' if tarea.categoria==c }}>{{ c|capitalize }}</option>{% endfor %}
+  </select>
+  <select id="t-prioridad" class="n-input" style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+    {% for p in prioridades %}<option value="{{ p }}" {{ 'selected' if tarea.prioridad==p }}>{{ p|capitalize }}</option>{% endfor %}
+  </select>
+  <input type="date" id="t-fecha" class="n-input" value="{{ tarea.fecha_limite or '' }}"
+         style="width:auto; font-size:13px; height:28px; padding:2px 8px;">
+  <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(55,53,47,0.6); cursor:pointer;">
+    <input type="checkbox" id="t-rec" {{ 'checked' if tarea.recurrente }} style="margin:0;"> cada
+    <input type="number" id="t-dias" value="{{ tarea.dias_recurrencia or 7 }}" min="1" max="365"
+           class="n-input" style="width:52px; font-size:13px; height:28px; padding:2px 6px;
+           display:{{ 'inline-block' if tarea.recurrente else 'none' }};"> días
+  </label>
+</div>
+
+<div id="editor-wrap">
+  <textarea id="editor-contenido">{{ tarea._content or '' }}</textarea>
+</div>
+
+<form id="form-guardar" method="POST" action="/tareas/{{ tarea.id }}/editar" style="display:none;" data-no-fetch>
+  <input type="hidden" name="titulo"           id="f-titulo">
+  <input type="hidden" name="categoria"        id="f-categoria">
+  <input type="hidden" name="prioridad"        id="f-prioridad">
+  <input type="hidden" name="fecha_limite"     id="f-fecha">
+  <input type="hidden" name="dias_recurrencia" id="f-dias">
+  <input type="hidden" name="contenido"        id="f-contenido">
+</form>
+
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<style>
+  .EasyMDEContainer .CodeMirror {
+    font-family: ui-sans-serif, -apple-system, sans-serif;
+    font-size: 15px; line-height: 1.7;
+    border: none; border-radius: 0; background: transparent; color: #37352f;
+    padding: 0; min-height: 300px; box-shadow: none;
+  }
+  .EasyMDEContainer .CodeMirror.CodeMirror-focused { box-shadow: none; }
+  .EasyMDEContainer .editor-toolbar {
+    border: none; border-bottom: 1px solid rgba(55,53,47,0.09);
+    border-radius: 0; background: transparent; opacity: 1; padding: 2px 0; margin-bottom: 16px;
+  }
+  .EasyMDEContainer .editor-toolbar button { color: rgba(55,53,47,0.5) !important; border-radius: 3px; }
+  .EasyMDEContainer .editor-toolbar button:hover,
+  .EasyMDEContainer .editor-toolbar button.active { background: rgba(55,53,47,0.08) !important; border-color: transparent !important; }
+  .EasyMDEContainer .editor-toolbar i.separator { border-color: rgba(55,53,47,0.12); }
+  .EasyMDEContainer .editor-preview { font-family: ui-sans-serif, -apple-system, sans-serif; font-size: 15px; color: #37352f; background: #fff; padding: 0 4px; line-height: 1.7; }
+  #t-titulo:empty:before { content: 'Sin título'; color: rgba(55,53,47,0.3); }
+</style>
+<script>
+const mde = new EasyMDE({
+  element: document.getElementById('editor-contenido'),
+  spellChecker: false,
+  toolbar: ['bold','italic','heading','|','unordered-list','ordered-list','|','link','quote','code','|','preview'],
+  status: false,
+  autosave: { enabled: false },
+  initialValue: document.getElementById('editor-contenido').value,
+});
+mde.togglePreview();
+
+async function guardar() {
+  const fd = new FormData();
+  fd.append('titulo', document.getElementById('t-titulo').innerText.trim());
+  fd.append('categoria', document.getElementById('t-categoria').value);
+  fd.append('prioridad', document.getElementById('t-prioridad').value);
+  fd.append('fecha_limite', document.getElementById('t-fecha').value);
+  fd.append('dias_recurrencia', document.getElementById('t-dias').value);
+  fd.append('contenido', mde.value());
+  if (document.getElementById('t-rec').checked) fd.append('recurrente', 'on');
+  try {
+    await fetch(document.getElementById('form-guardar').action, {
+      method: 'POST', body: fd,
+      headers: { 'X-Requested-With': 'fetch' },
+    });
+    if (window.recargarSidebar) window.recargarSidebar();
+  } catch(e) {}
+}
+
+document.getElementById('t-titulo').addEventListener('blur', guardar);
+['t-categoria','t-prioridad','t-fecha'].forEach(id =>
+  document.getElementById(id).addEventListener('change', guardar));
+document.getElementById('t-rec').addEventListener('change', function() {
+  document.getElementById('t-dias').style.display = this.checked ? 'inline-block' : 'none';
+  guardar();
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); guardar(); }
+});
+window.addEventListener('beforeunload', () => {
+  const fd = new FormData();
+  fd.append('titulo', document.getElementById('t-titulo').innerText.trim());
+  fd.append('categoria', document.getElementById('t-categoria').value);
+  fd.append('prioridad', document.getElementById('t-prioridad').value);
+  fd.append('fecha_limite', document.getElementById('t-fecha').value);
+  fd.append('dias_recurrencia', document.getElementById('t-dias').value);
+  fd.append('contenido', mde.value());
+  if (document.getElementById('t-rec').checked) fd.append('recurrente', 'on');
+  fetch(document.getElementById('form-guardar').action, {
+    method: 'POST', body: fd, keepalive: true,
+    headers: { 'X-Requested-With': 'fetch' },
+  });
+});
+</script>
+{% endblock %}
