@@ -44,8 +44,8 @@
     }
     .nav-toggle.open { transform: rotate(90deg); }
     .nav-parent { cursor: pointer; }
-    .nav-subitems { display: block; }
-    .nav-subitems.collapsed { display: none; }
+    .nav-subitems { display: none; }
+    .nav-subitems.open { display: block; }
 
     .nav-subitem {
       display: flex; align-items: center; gap: 6px;
@@ -202,21 +202,26 @@
   </aside>
 
   <script>
+    const SECTIONS = ['tareas', 'eventos', 'recetas', 'limpieza'];
+
     function toggle(id) {
       const sub = document.getElementById('sub-' + id);
       const arr = document.getElementById('arr-' + id);
-      const collapsed = sub.classList.toggle('collapsed');
-      arr.classList.toggle('open', !collapsed);
-      const saved = JSON.parse(localStorage.getItem('nav-collapsed') || '[]');
-      const updated = collapsed ? [...new Set([...saved, id])] : saved.filter(x => x !== id);
-      localStorage.setItem('nav-collapsed', JSON.stringify(updated));
+      const isOpen = sub.classList.toggle('open');
+      arr.classList.toggle('open', isOpen);
+      const saved = JSON.parse(localStorage.getItem('nav-open') || '[]');
+      const updated = isOpen ? [...new Set([...saved, id])] : saved.filter(x => x !== id);
+      localStorage.setItem('nav-open', JSON.stringify(updated));
     }
-    // Restaurar estado
-    const collapsed = JSON.parse(localStorage.getItem('nav-collapsed') || '[]');
-    collapsed.forEach(id => {
+
+    // Restaurar: abrir los que estaban abiertos, o la sección activa por defecto
+    const path = window.location.pathname;
+    const saved = JSON.parse(localStorage.getItem('nav-open') || 'null');
+    const toOpen = saved !== null ? saved : SECTIONS.filter(id => path.includes('/' + id));
+    toOpen.forEach(id => {
       const sub = document.getElementById('sub-' + id);
       const arr = document.getElementById('arr-' + id);
-      if (sub) { sub.classList.add('collapsed'); arr.classList.remove('open'); }
+      if (sub) { sub.classList.add('open'); arr.classList.add('open'); }
     });
   </script>
 
