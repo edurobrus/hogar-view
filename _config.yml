@@ -1,0 +1,42 @@
+title: Mi Hogar
+description: Vétraz-Monthoux
+baseurl: "/hogar-view"
+url: "https://edurobrus.github.io"
+theme: minima
+markdown: kramdown
+
+collections:
+  tareas:
+    output: true
+    permalink: /tareas/:name/
+  eventos:
+    output: true
+    permalink: /eventos/:name/
+  recetas:
+    output: true
+    permalink: /recetas/:name/
+  limpieza:
+    output: true
+    permalink: /limpieza/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: tareas
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: eventos
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: recetas
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: limpieza
+    values:
+      layout: item

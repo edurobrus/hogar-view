@@ -1,0 +1,160 @@
+---
+fecha_creacion: '2026-06-28 00:00:00'
+fecha_modificacion: '2026-06-28 00:28:09'
+id: 11
+titulo: Pollo en salsa de cerveza y romero (Cómetelo)
+---
+
+Fuente: [YouTube Cómetelo](https://www.youtube.com/watch?v=Sch3sq564ho)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Ingredientes (4 personas)
+
+
+
+
+
+
+
+- 750 g pechugas de pollo
+
+
+
+
+
+
+
+- 1 vaso cerveza
+
+
+
+
+
+
+
+- 1 litro caldo de ave
+
+
+
+
+
+
+
+- 1 cebolla, 4 ajos, 2 zanahorias
+
+
+
+
+
+
+
+- 2 patatas medianas
+
+
+
+
+
+
+
+- 12 huevos de codorniz (opcional)
+
+
+
+
+
+
+
+- 2 rebanadas pan de molde, 50 g queso rallado, pan rallado
+
+
+
+
+
+
+
+- 1 tacita leche
+
+
+
+
+
+
+
+- Comino, orégano, romero, laurel, perejil
+
+
+
+
+
+
+
+- Aceite, sal, pimienta
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Pasos
+
+
+
+
+
+
+
+1. Dorar en cacerola: 2 ajos laminados, cebolla, laurel, zanahorias. Verter cerveza, hervir. Añadir caldo. Reducir a fuego bajo.
+
+
+
+
+
+
+
+2. Picar pechugas fino. Empapar pan en leche. Mezclar con pollo, 2 ajos, perejil, comino, orégano, sal, pimienta. Ajustar con pan rallado.
+
+
+
+
+
+
+
+3. Hacer albóndigas grandes, rellenar con huevo de codorniz cocido + queso. Dorar en sartén con aceite y romero.
+
+
+
+
+
+
+
+4. Triturar la salsa, introducir albóndigas y romero. Tapar, cocer 15-20 min a fuego lento.
+
+
+
+
+
+
+
+5. Freír patatas en bastones en la misma sartén.

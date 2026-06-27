@@ -1,0 +1,168 @@
+---
+fecha_creacion: '2026-06-28 00:00:00'
+fecha_modificacion: '2026-06-28 00:44:13'
+id: 8
+titulo: Fritada con huevos fritos (Cómetelo)
+---
+
+Fuente: [YouTube Cómetelo](https://www.youtube.com/watch?v=eUPjJb73kJI)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Ingredientes (4 personas)
+
+
+
+
+
+
+
+- 4 huevos
+
+
+
+
+
+
+
+- 2 cebollas
+
+
+
+
+
+
+
+- 4 dientes de ajo
+
+
+
+
+
+
+
+- 1 pimiento rojo
+
+
+
+
+
+
+
+- 1 pimiento verde
+
+
+
+
+
+
+
+- 1,25 kg tomates
+
+
+
+
+
+
+
+- 200 g panceta ibérica
+
+
+
+
+
+
+
+- 200 g filetes de lomo
+
+
+
+
+
+
+
+- 1 cucharada azúcar
+
+
+
+
+
+
+
+- Laurel, perejil
+
+
+
+
+
+
+
+- Aceite oliva, sal, pimienta
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Pasos
+
+
+
+
+
+
+
+1. Rehogar en cacerola: cebollas en juliana, ajos laminados, pimientos en dados. Añadir laurel.
+
+
+
+
+
+
+
+2. Añadir panceta y lomo troceados. Sofreír.
+
+
+
+
+
+
+
+3. Escaldar tomates 30s en agua hirviendo, pelar, triturar. Verter sobre la cacerola.
+
+
+
+
+
+
+
+4. Salpimentar, añadir azúcar. Cocer hasta que el tomate esté frito.
+
+
+
+
+
+
+
+5. Freír huevos aparte. Servir la fritada con huevos encima y perejil picado.

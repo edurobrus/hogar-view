@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<div style="margin-bottom:8px;">
+  <a href="{{ site.baseurl }}/{{ page.collection }}/" style="font-size:13px; color:#888; text-decoration:none;">← {{ page.collection | capitalize }}</a>
+</div>
+<h1>{{ page.titulo | default: page.title }}</h1>
+
+{% if page.fecha %}<p style="color:#888; font-size:13px; margin-bottom:4px;">📅 {{ page.fecha }}{% if page.hora %} · {{ page.hora }}{% endif %}</p>{% endif %}
+{% if page.fecha_limite %}<p style="color:#888; font-size:13px; margin-bottom:4px;">⏰ Límite: {{ page.fecha_limite }}</p>{% endif %}
+{% if page.prioridad %}<p style="font-size:13px; margin-bottom:4px;">Prioridad: <strong>{{ page.prioridad }}</strong></p>{% endif %}
+{% if page.estado %}<p style="font-size:13px; margin-bottom:16px;">Estado: <strong>{{ page.estado }}</strong></p>{% endif %}
+
+<div style="margin-top:20px; line-height:1.7;">
+{{ content }}
+</div>
