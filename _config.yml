@@ -5,6 +5,7 @@ url: "https://edurobrus.github.io"
 theme: minima
 markdown: kramdown
 
+collections_dir: data
 collections:
   tareas:
     output: true

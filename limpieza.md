@@ -4,10 +4,17 @@ title: Limpieza
 permalink: /limpieza/
 ---
 
-# Limpieza
+<div class="page-icon">🧹</div>
+<h1 class="page-title">Limpieza</h1>
 
-{% for item in site.limpieza %}
-<div style="background:#fff; border-radius:6px; padding:14px 16px; margin-bottom:10px; border:1px solid #e5e5e5;">
-  <a href="{{ item.url | prepend: site.baseurl }}" style="text-decoration:none; color:#37352f; font-weight:500;">{{ item.titulo }}</a>
-</div>
+{% assign items = site.limpieza | sort: "titulo" %}
+{% for item in items %}
+<a href="{{ item.url | prepend: site.baseurl }}" class="n-row">
+  <span class="nav-icon" style="opacity:0.5;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4"/><path d="M10.5 13.5L3 21"/><path d="M14 3l7 7-9.5 9.5-7-7z"/></svg>
+  </span>
+  <span style="flex:1;">{{ item.titulo | default: item.title }}</span>
+</a>
+{% else %}
+<p class="n-empty">Sin rutinas de limpieza.</p>
 {% endfor %}

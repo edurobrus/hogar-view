@@ -4,10 +4,17 @@ title: Recetas
 permalink: /recetas/
 ---
 
-# Recetas
+<div class="page-icon">🍳</div>
+<h1 class="page-title">Recetas</h1>
 
-{% for receta in site.recetas %}
-<div style="background:#fff; border-radius:6px; padding:14px 16px; margin-bottom:10px; border:1px solid #e5e5e5;">
-  <a href="{{ receta.url | prepend: site.baseurl }}" style="text-decoration:none; color:#37352f; font-weight:500;">{{ receta.titulo }}</a>
-</div>
+{% assign recetas = site.recetas | sort: "titulo" %}
+{% for r in recetas %}
+<a href="{{ r.url | prepend: site.baseurl }}" class="n-row">
+  <span class="nav-icon" style="opacity:0.5;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+  </span>
+  <span style="flex:1;">{{ r.titulo | default: r.title }}</span>
+</a>
+{% else %}
+<p class="n-empty">Sin recetas.</p>
 {% endfor %}

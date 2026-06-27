@@ -4,12 +4,17 @@ title: Eventos
 permalink: /eventos/
 ---
 
-# Eventos
+<div class="page-icon">🕐</div>
+<h1 class="page-title">Eventos</h1>
 
 {% assign eventos = site.eventos | sort: "fecha" %}
-{% for evento in eventos %}
-<div style="background:#fff; border-radius:6px; padding:14px 16px; margin-bottom:10px; border:1px solid #e5e5e5;">
-  <a href="{{ evento.url | prepend: site.baseurl }}" style="text-decoration:none; color:#37352f; font-weight:500;">{{ evento.titulo }}</a>
-  <div style="font-size:12px; color:#888; margin-top:4px;">📅 {{ evento.fecha }}{% if evento.hora %} · {{ evento.hora }}{% endif %}</div>
-</div>
+{% for e in eventos %}
+<a href="{{ e.url | prepend: site.baseurl }}" class="n-row">
+  <span style="font-size:12px; color:rgba(55,53,47,0.4); min-width:70px; flex-shrink:0;">{{ e.fecha }}</span>
+  {% if e.hora %}<span style="font-size:12px; color:rgba(55,53,47,0.35); flex-shrink:0;">{{ e.hora }}</span>{% endif %}
+  <span style="flex:1;">{{ e.titulo | default: e.title }}</span>
+  {% if e.tipo %}<span class="n-tag tag-{{ e.tipo }}">{{ e.tipo }}</span>{% endif %}
+</a>
+{% else %}
+<p class="n-empty">Sin eventos.</p>
 {% endfor %}

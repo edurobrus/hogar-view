@@ -3,12 +3,12 @@ Storage backend: archivos Markdown con frontmatter YAML.
 
 Estructura:
   data/
-    tareas/    slug-titulo_ID.md
-    eventos/   YYYY-MM-DD_slug-titulo_ID.md
+    _tareas/   slug-titulo_ID.md
+    _eventos/  YYYY-MM-DD_slug-titulo_ID.md
     compras/   ID_slug.md
     gastos/    YYYY-MM-DD_ID_slug.md
-    recetas/   slug_ID.md
-    limpieza/  slug_ID.md
+    _recetas/  slug_ID.md
+    _limpieza/ slug_ID.md
     comida/    slug_ID.md
 """
 
@@ -20,10 +20,10 @@ from pathlib import Path
 BASE = Path(__file__).parent / "data"
 
 DIRS = {
-    "tareas":   BASE / "tareas",
-    "eventos":  BASE / "eventos",
-    "recetas":  BASE / "recetas",
-    "limpieza": BASE / "limpieza",
+    "tareas":   BASE / "_tareas",
+    "eventos":  BASE / "_eventos",
+    "recetas":  BASE / "_recetas",
+    "limpieza": BASE / "_limpieza",
     "comida":   BASE / "comida",
 }
 

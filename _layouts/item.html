@@ -1,16 +1,73 @@
 ---
 layout: default
 ---
-<div style="margin-bottom:8px;">
-  <a href="{{ site.baseurl }}/{{ page.collection }}/" style="font-size:13px; color:#888; text-decoration:none;">← {{ page.collection | capitalize }}</a>
-</div>
-<h1>{{ page.titulo | default: page.title }}</h1>
 
-{% if page.fecha %}<p style="color:#888; font-size:13px; margin-bottom:4px;">📅 {{ page.fecha }}{% if page.hora %} · {{ page.hora }}{% endif %}</p>{% endif %}
-{% if page.fecha_limite %}<p style="color:#888; font-size:13px; margin-bottom:4px;">⏰ Límite: {{ page.fecha_limite }}</p>{% endif %}
-{% if page.prioridad %}<p style="font-size:13px; margin-bottom:4px;">Prioridad: <strong>{{ page.prioridad }}</strong></p>{% endif %}
-{% if page.estado %}<p style="font-size:13px; margin-bottom:16px;">Estado: <strong>{{ page.estado }}</strong></p>{% endif %}
+<a href="{{ site.baseurl }}/{{ page.collection }}/" class="back-link">
+  ← {{ page.collection | capitalize }}
+</a>
 
-<div style="margin-top:20px; line-height:1.7;">
-{{ content }}
+<div class="page-icon">
+  {% if page.collection == 'tareas' %}✅
+  {% elsif page.collection == 'eventos' %}🕐
+  {% elsif page.collection == 'recetas' %}🍳
+  {% elsif page.collection == 'limpieza' %}🧹
+  {% else %}📄{% endif %}
 </div>
+<h1 class="page-title">{{ page.titulo | default: page.title }}</h1>
+
+<div class="props">
+  {% if page.prioridad %}
+  <div class="prop-row">
+    <span class="prop-key">Prioridad</span>
+    <span class="prop-val"><span class="n-tag tag-{{ page.prioridad }}">{{ page.prioridad }}</span></span>
+  </div>
+  {% endif %}
+  {% if page.estado %}
+  <div class="prop-row">
+    <span class="prop-key">Estado</span>
+    <span class="prop-val"><span class="n-tag tag-{{ page.estado }}">{{ page.estado }}</span></span>
+  </div>
+  {% endif %}
+  {% if page.categoria %}
+  <div class="prop-row">
+    <span class="prop-key">Categoría</span>
+    <span class="prop-val"><span class="n-tag tag-{{ page.categoria }}">{{ page.categoria }}</span></span>
+  </div>
+  {% endif %}
+  {% if page.fecha_limite %}
+  <div class="prop-row">
+    <span class="prop-key">Fecha límite</span>
+    <span class="prop-val" style="color:rgba(55,53,47,0.6);">{{ page.fecha_limite }}</span>
+  </div>
+  {% endif %}
+  {% if page.fecha %}
+  <div class="prop-row">
+    <span class="prop-key">Fecha</span>
+    <span class="prop-val" style="color:rgba(55,53,47,0.6);">{{ page.fecha }}{% if page.hora %} · {{ page.hora }}{% endif %}</span>
+  </div>
+  {% endif %}
+  {% if page.tipo %}
+  <div class="prop-row">
+    <span class="prop-key">Tipo</span>
+    <span class="prop-val"><span class="n-tag tag-{{ page.tipo }}">{{ page.tipo }}</span></span>
+  </div>
+  {% endif %}
+  {% if page.recurrente == 1 %}
+  <div class="prop-row">
+    <span class="prop-key">Recurrente</span>
+    <span class="prop-val" style="color:#2383e2;">↻ cada {{ page.dias_recurrencia }} días</span>
+  </div>
+  {% endif %}
+  {% if page.fecha_creacion %}
+  <div class="prop-row">
+    <span class="prop-key">Creado</span>
+    <span class="prop-val" style="color:rgba(55,53,47,0.4);">{{ page.fecha_creacion }}</span>
+  </div>
+  {% endif %}
+</div>
+
+{% if content and content != "" %}
+<div class="prose">
+  {{ content }}
+</div>
+{% endif %}
