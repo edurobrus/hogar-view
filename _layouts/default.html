@@ -7,7 +7,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
       font-size: 14px; line-height: 1.5; color: #37352f; background: #fff;
       display: flex; height: 100vh; overflow: hidden;
     }
@@ -19,30 +19,49 @@
       background: #f7f7f5; border-right: 1px solid rgba(55,53,47,0.09);
       display: flex; flex-direction: column; padding: 8px 4px; gap: 1px;
     }
-    .sidebar-brand {
+    .sidebar-workspace {
       display: flex; align-items: center; gap: 8px;
       padding: 6px 12px; border-radius: 6px; margin-bottom: 4px;
-      font-size: 14px; font-weight: 600; color: #37352f;
     }
+    .sidebar-workspace-name { font-size: 14px; font-weight: 600; color: #37352f; }
+
     .nav-item {
       display: flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 4px;
+      padding: 3px 12px; border-radius: 4px;
       font-size: 14px; color: #37352f; text-decoration: none;
       min-height: 30px; transition: background 80ms ease-in;
     }
     .nav-item:hover { background: rgba(55,53,47,0.08); }
-    .nav-item.active { background: rgba(55,53,47,0.08); font-weight: 500; }
+    .nav-item.active { background: rgba(55,53,47,0.08); }
     .nav-icon { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; opacity: 0.85; }
+
+    .nav-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; flex-shrink: 0;
+      color: rgba(55,53,47,0.35);
+    }
+    .nav-toggle.open { transform: rotate(90deg); }
+
+    .nav-subitem {
+      display: flex; align-items: center; gap: 6px;
+      padding: 3px 12px 3px 28px; border-radius: 4px;
+      font-size: 13px; color: rgba(55,53,47,0.7); text-decoration: none;
+      min-height: 28px; transition: background 80ms ease-in;
+      overflow: hidden;
+    }
+    .nav-subitem:hover { background: rgba(55,53,47,0.08); }
+    .nav-subitem.active { background: rgba(55,53,47,0.08); color: #37352f; }
+
     .n-divider { height: 1px; background: rgba(55,53,47,0.09); margin: 8px 12px; }
 
     /* MAIN */
     .page-wrapper { flex: 1; min-width: 0; overflow-y: auto; }
-    .page-content { max-width: 720px; margin: 0 auto; padding: 64px 96px 200px; }
+    .page-content { max-width: 720px; margin: 0 auto; padding: 96px 96px 200px; }
 
     /* HEADER */
     .page-icon { font-size: 56px; line-height: 1; margin-bottom: 12px; }
     .page-title { font-size: 40px; font-weight: 700; line-height: 1.2; color: #37352f; letter-spacing: -0.02em; margin-bottom: 32px; }
-    .block-h2 { font-size: 18px; font-weight: 600; color: #37352f; margin: 24px 0 8px; }
+    .block-h2 { font-size: 18px; font-weight: 600; color: #37352f; margin: 24px 0 6px; }
 
     /* TAGS */
     .n-tag {
@@ -78,7 +97,7 @@
     /* EMPTY */
     .n-empty { color: rgba(55,53,47,0.4); padding: 32px 0; font-size: 14px; }
 
-    /* PROSE (item detail) */
+    /* PROSE */
     .prose { line-height: 1.7; color: #37352f; }
     .prose h1, .prose h2, .prose h3 { margin: 1.2em 0 0.4em; font-weight: 600; }
     .prose p { margin-bottom: 0.8em; }
@@ -96,7 +115,6 @@
     .props { margin-bottom: 28px; display: flex; flex-direction: column; gap: 4px; }
     .prop-row { display: flex; align-items: center; gap: 12px; padding: 4px 0; font-size: 14px; }
     .prop-key { color: rgba(55,53,47,0.5); min-width: 120px; font-size: 13px; }
-    .prop-val { color: #37352f; }
 
     footer { display: none; }
   </style>
@@ -104,44 +122,78 @@
 <body>
 
   <aside class="sidebar">
-    <div class="sidebar-brand">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Mi Apartamento
+    <div class="sidebar-workspace">
+      <span class="nav-icon" style="opacity:1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="sidebar-workspace-name">Mi Apartamento</span>
     </div>
 
-    <a href="{{ site.baseurl }}/" class="nav-item {% if page.url == '/' or page.url == site.baseurl or page.url == site.baseurl | append: '/' %}active{% endif %}">
-      <span class="nav-icon">🏠</span> Inicio
-    </a>
-    <a href="{{ site.baseurl }}/tareas/" class="nav-item {% if page.url contains '/tareas' %}active{% endif %}">
-      <span class="nav-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      </span> Tareas
-    </a>
-    <a href="{{ site.baseurl }}/eventos/" class="nav-item {% if page.url contains '/eventos' %}active{% endif %}">
-      <span class="nav-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </span> Eventos
-    </a>
-    <a href="{{ site.baseurl }}/recetas/" class="nav-item {% if page.url contains '/recetas' %}active{% endif %}">
-      <span class="nav-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
-      </span> Recetas
-    </a>
-    <a href="{{ site.baseurl }}/limpieza/" class="nav-item {% if page.url contains '/limpieza' %}active{% endif %}">
-      <span class="nav-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4"/><path d="M10.5 13.5L3 21"/><path d="M14 3l7 7-9.5 9.5-7-7z"/></svg>
-      </span> Limpieza
-    </a>
-
-    <div class="n-divider"></div>
-
+    <!-- Tareas -->
+    <div class="nav-item {% if page.url contains '/tareas' %}active{% endif %}">
+      <span class="nav-toggle open">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+      <a href="{{ site.baseurl }}/tareas/" style="flex:1; text-decoration:none; color:inherit;">Tareas</a>
+    </div>
     {% assign tareas_sidebar = site.tareas | where_exp: "t", "t.completada != 1" | sort: "titulo" %}
-    {% for t in tareas_sidebar limit: 8 %}
-    <a href="{{ t.url | prepend: site.baseurl }}" class="nav-item {% if page.url == t.url %}active{% endif %}" style="padding-left:28px; font-size:13px; color:rgba(55,53,47,0.7);">
-      <span style="width:13px; height:13px; border:1.5px solid rgba(55,53,47,0.25); border-radius:50%; flex-shrink:0;"></span>
+    {% for t in tareas_sidebar limit: 10 %}
+    <a href="{{ t.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == t.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
       <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ t.titulo | default: t.title }}</span>
     </a>
     {% endfor %}
+
+    <!-- Eventos -->
+    <div class="nav-item {% if page.url contains '/eventos' %}active{% endif %}">
+      <span class="nav-toggle open">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      <a href="{{ site.baseurl }}/eventos/" style="flex:1; text-decoration:none; color:inherit;">Eventos</a>
+    </div>
+    {% assign eventos_sidebar = site.eventos | sort: "fecha" %}
+    {% for e in eventos_sidebar limit: 6 %}
+    <a href="{{ e.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == e.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      <span style="color:rgba(55,53,47,0.4); margin-right:2px; flex-shrink:0;">{{ e.fecha | slice: 5, 5 }}</span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ e.titulo | default: e.title }}</span>
+    </a>
+    {% endfor %}
+
+    <!-- Recetas -->
+    <div class="nav-item {% if page.url contains '/recetas' %}active{% endif %}">
+      <span class="nav-toggle open">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>
+      <a href="{{ site.baseurl }}/recetas/" style="flex:1; text-decoration:none; color:inherit;">Recetas</a>
+    </div>
+    {% assign recetas_sidebar = site.recetas | sort: "titulo" %}
+    {% for r in recetas_sidebar limit: 8 %}
+    <a href="{{ r.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == r.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.titulo | default: r.title }}</span>
+    </a>
+    {% endfor %}
+
+    <!-- Limpieza -->
+    <div class="nav-item {% if page.url contains '/limpieza' %}active{% endif %}">
+      <span class="nav-toggle open">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4"/><path d="M10.5 13.5L3 21"/><path d="M14 3l7 7-9.5 9.5-7-7z"/></svg></span>
+      <a href="{{ site.baseurl }}/limpieza/" style="flex:1; text-decoration:none; color:inherit;">Limpieza</a>
+    </div>
+    {% assign limpiezas_sidebar = site.limpieza | sort: "titulo" %}
+    {% for l in limpiezas_sidebar limit: 6 %}
+    <a href="{{ l.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == l.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4"/><path d="M10.5 13.5L3 21"/><path d="M14 3l7 7-9.5 9.5-7-7z"/></svg></span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ l.titulo | default: l.title }}</span>
+    </a>
+    {% endfor %}
+
   </aside>
 
   <div class="page-wrapper">
