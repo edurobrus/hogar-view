@@ -39,8 +39,13 @@
       display: flex; align-items: center; justify-content: center;
       width: 16px; height: 16px; flex-shrink: 0;
       color: rgba(55,53,47,0.35);
+      transition: transform 80ms ease-in;
+      cursor: pointer;
     }
     .nav-toggle.open { transform: rotate(90deg); }
+    .nav-parent { cursor: pointer; }
+    .nav-subitems { display: block; }
+    .nav-subitems.collapsed { display: none; }
 
     .nav-subitem {
       display: flex; align-items: center; gap: 6px;
@@ -130,13 +135,12 @@
     </div>
 
     <!-- Tareas -->
-    <div class="nav-item {% if page.url contains '/tareas' %}active{% endif %}">
-      <span class="nav-toggle open">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </span>
+    <div class="nav-item nav-parent {% if page.url contains '/tareas' %}active{% endif %}" onclick="toggle('tareas')">
+      <span class="nav-toggle open" id="arr-tareas"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-      <a href="{{ site.baseurl }}/tareas/" style="flex:1; text-decoration:none; color:inherit;">Tareas</a>
+      <a href="{{ site.baseurl }}/tareas/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Tareas</a>
     </div>
+    <div id="sub-tareas" class="nav-subitems">
     {% assign tareas_sidebar = site.tareas | where_exp: "t", "t.completada != 1" | sort: "titulo" %}
     {% for t in tareas_sidebar limit: 10 %}
     <a href="{{ t.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == t.url %}active{% endif %}">
@@ -144,15 +148,15 @@
       <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ t.titulo | default: t.title }}</span>
     </a>
     {% endfor %}
+    </div>
 
     <!-- Eventos -->
-    <div class="nav-item {% if page.url contains '/eventos' %}active{% endif %}">
-      <span class="nav-toggle open">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </span>
+    <div class="nav-item nav-parent {% if page.url contains '/eventos' %}active{% endif %}" onclick="toggle('eventos')">
+      <span class="nav-toggle open" id="arr-eventos"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-      <a href="{{ site.baseurl }}/eventos/" style="flex:1; text-decoration:none; color:inherit;">Eventos</a>
+      <a href="{{ site.baseurl }}/eventos/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Eventos</a>
     </div>
+    <div id="sub-eventos" class="nav-subitems">
     {% assign eventos_sidebar = site.eventos | sort: "fecha" %}
     {% for e in eventos_sidebar limit: 6 %}
     <a href="{{ e.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == e.url %}active{% endif %}">
@@ -161,15 +165,15 @@
       <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ e.titulo | default: e.title }}</span>
     </a>
     {% endfor %}
+    </div>
 
     <!-- Recetas -->
-    <div class="nav-item {% if page.url contains '/recetas' %}active{% endif %}">
-      <span class="nav-toggle open">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </span>
+    <div class="nav-item nav-parent {% if page.url contains '/recetas' %}active{% endif %}" onclick="toggle('recetas')">
+      <span class="nav-toggle open" id="arr-recetas"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg></span>
-      <a href="{{ site.baseurl }}/recetas/" style="flex:1; text-decoration:none; color:inherit;">Recetas</a>
+      <a href="{{ site.baseurl }}/recetas/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Recetas</a>
     </div>
+    <div id="sub-recetas" class="nav-subitems">
     {% assign recetas_sidebar = site.recetas | sort: "titulo" %}
     {% for r in recetas_sidebar limit: 8 %}
     <a href="{{ r.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == r.url %}active{% endif %}">
@@ -177,15 +181,15 @@
       <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.titulo | default: r.title }}</span>
     </a>
     {% endfor %}
+    </div>
 
     <!-- Limpieza -->
-    <div class="nav-item {% if page.url contains '/limpieza' %}active{% endif %}">
-      <span class="nav-toggle open">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </span>
+    <div class="nav-item nav-parent {% if page.url contains '/limpieza' %}active{% endif %}" onclick="toggle('limpieza')">
+      <span class="nav-toggle open" id="arr-limpieza"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4"/><path d="M10.5 13.5L3 21"/><path d="M14 3l7 7-9.5 9.5-7-7z"/></svg></span>
-      <a href="{{ site.baseurl }}/limpieza/" style="flex:1; text-decoration:none; color:inherit;">Limpieza</a>
+      <a href="{{ site.baseurl }}/limpieza/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Limpieza</a>
     </div>
+    <div id="sub-limpieza" class="nav-subitems">
     {% assign limpiezas_sidebar = site.limpieza | sort: "titulo" %}
     {% for l in limpiezas_sidebar limit: 6 %}
     <a href="{{ l.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == l.url %}active{% endif %}">
@@ -193,8 +197,28 @@
       <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ l.titulo | default: l.title }}</span>
     </a>
     {% endfor %}
+    </div>
 
   </aside>
+
+  <script>
+    function toggle(id) {
+      const sub = document.getElementById('sub-' + id);
+      const arr = document.getElementById('arr-' + id);
+      const collapsed = sub.classList.toggle('collapsed');
+      arr.classList.toggle('open', !collapsed);
+      const saved = JSON.parse(localStorage.getItem('nav-collapsed') || '[]');
+      const updated = collapsed ? [...new Set([...saved, id])] : saved.filter(x => x !== id);
+      localStorage.setItem('nav-collapsed', JSON.stringify(updated));
+    }
+    // Restaurar estado
+    const collapsed = JSON.parse(localStorage.getItem('nav-collapsed') || '[]');
+    collapsed.forEach(id => {
+      const sub = document.getElementById('sub-' + id);
+      const arr = document.getElementById('arr-' + id);
+      if (sub) { sub.classList.add('collapsed'); arr.classList.remove('open'); }
+    });
+  </script>
 
   <div class="page-wrapper">
     <div class="page-content">
