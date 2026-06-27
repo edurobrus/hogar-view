@@ -2,7 +2,6 @@ title: Mi Hogar
 description: Vétraz-Monthoux
 baseurl: "/hogar-view"
 url: "https://edurobrus.github.io"
-theme: minima
 markdown: kramdown
 
 collections_dir: data
