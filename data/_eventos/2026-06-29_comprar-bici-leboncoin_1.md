@@ -5,7 +5,7 @@ descripcion: "Ver bici en Cranves-Sales, 191 chemin des Narulles"
 fecha: 2026-06-29
 hora: "10:30"
 tipo: cita
-completado: 0
+completado: 1
 ---
 
 **Vendedor:** Cranves-Sales

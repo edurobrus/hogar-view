@@ -14,9 +14,14 @@
   {% endfor %}
   <span style="color:rgba(55,53,47,0.15); padding:0 6px; font-size:13px;">|</span>
   {% for p in prioridades %}
-    <a href="/tareas?prioridad={{ p }}{% if filtro_cat %}&categoria={{ filtro_cat }}{% endif %}"
+    <a href="/tareas?prioridad={{ p }}{% if filtro_cat %}&categoria={{ filtro_cat }}{% endif %}{% if mostrar_completadas %}&completadas=1{% endif %}"
        class="f-btn {{ 'f-btn-active' if filtro_pri==p }}">{{ p|capitalize }}</a>
   {% endfor %}
+  <span style="color:rgba(55,53,47,0.15); padding:0 6px; font-size:13px;">|</span>
+  <a href="/tareas?{% if filtro_cat %}categoria={{ filtro_cat }}&{% endif %}{% if filtro_pri %}prioridad={{ filtro_pri }}&{% endif %}completadas={{ '0' if mostrar_completadas else '1' }}"
+     class="f-btn {{ 'f-btn-active' if mostrar_completadas }}" style="color:rgba(55,53,47,0.45);">
+    {% if mostrar_completadas %}Ocultar completadas{% else %}Ver completadas{% endif %}
+  </a>
 </div>
 
 <!-- LISTA -->
@@ -39,9 +44,9 @@
   </form>
 </div>
 {% else %}
-{% if filtro_cat or filtro_pri %}
-<p style="color:rgba(55,53,47,0.35); font-size:14px; padding:8px 0;">Sin tareas con este filtro.</p>
-{% endif %}
+<p style="color:rgba(55,53,47,0.35); font-size:14px; padding:8px 0;">
+  {% if filtro_cat or filtro_pri %}Sin tareas con este filtro.{% else %}Sin tareas pendientes.{% endif %}
+</p>
 {% endfor %}
 
 <!-- FILA INLINE NUEVA TAREA -->

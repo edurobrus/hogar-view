@@ -12,9 +12,11 @@ PRIORIDADES = ['urgente', 'normal', 'opcional']
 def index():
     categoria = request.args.get('categoria', '')
     prioridad = request.args.get('prioridad', '')
+    mostrar_completadas = request.args.get('completadas', '') == '1'
     lista = database.todas_las_tareas(
         categoria=categoria or None,
         prioridad=prioridad or None,
+        incluir_completadas=mostrar_completadas,
     )
     return render_template(
         'tareas.html',
@@ -23,6 +25,7 @@ def index():
         prioridades=PRIORIDADES,
         filtro_cat=categoria,
         filtro_pri=prioridad,
+        mostrar_completadas=mostrar_completadas,
     )
 
 

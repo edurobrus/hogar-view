@@ -210,7 +210,7 @@
       <a href="{{ site.baseurl }}/eventos/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Eventos</a>
     </div>
     <div id="sub-eventos" class="nav-subitems">
-    {% assign eventos_sidebar = site.eventos | sort: "fecha" %}
+    {% assign eventos_sidebar = site.eventos | where_exp: "e", "e.completado != 1" | sort: "fecha" %}
     {% for e in eventos_sidebar limit: 6 %}
     <a href="{{ e.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == e.url %}active{% endif %}">
       <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>

@@ -162,14 +162,15 @@ def tareas_de_hoy() -> list[_DictRow]:
     ))
     return result
 
-def todas_las_tareas(categoria=None, prioridad=None) -> list[_DictRow]:
+def todas_las_tareas(categoria=None, prioridad=None, incluir_completadas=False) -> list[_DictRow]:
     items = _tareas_all()
+    if not incluir_completadas:
+        items = [t for t in items if not t.get('completada', 0)]
     if categoria:
         items = [t for t in items if t.get('categoria') == categoria]
     if prioridad:
         items = [t for t in items if t.get('prioridad') == prioridad]
     items.sort(key=lambda t: (
-        int(t.get('completada', 0)),
         {'urgente': 0, 'normal': 1, 'opcional': 2}.get(t.get('prioridad', 'normal'), 1),
         str(t.get('fecha_creacion', '')),
     ))
@@ -266,10 +267,12 @@ def crear_evento(titulo, descripcion, fecha, hora, tipo):
     _save(DIRS['eventos'], _evento_filename(meta), meta)
     return meta['id']
 
-def todos_los_eventos() -> list[_DictRow]:
+def todos_los_eventos(incluir_completados=False) -> list[_DictRow]:
     result = _all(DIRS['eventos'])
     for e in result:
         e['descripcion'] = e.get('_content', '') or e.get('descripcion', '')
+    if not incluir_completados:
+        result = [e for e in result if not e.get('completado', 0)]
     result.sort(key=lambda e: (str(e.get('fecha', '')), str(e.get('hora') or 'z')))
     return result
 
@@ -287,9 +290,11 @@ def editar_evento(evento_id: int, titulo, descripcion, fecha, hora, tipo):
     f.unlink()
     _save(DIRS['eventos'], new_name, meta, descripcion or '')
 
-def eventos_del_mes(year: int, month: int) -> list[_DictRow]:
+def eventos_del_mes(year: int, month: int, incluir_completados=False) -> list[_DictRow]:
     prefix = f"{year}-{month:02d}-"
     result = [e for e in _all(DIRS['eventos']) if str(e.get('fecha', '')).startswith(prefix)]
+    if not incluir_completados:
+        result = [e for e in result if not e.get('completado', 0)]
     result.sort(key=lambda e: (str(e.get('fecha', '')), str(e.get('hora') or 'z')))
     return result
 
@@ -297,6 +302,8 @@ def dias_con_eventos(year: int, month: int) -> set[int]:
     prefix = f"{year}-{month:02d}-"
     dias = set()
     for e in _all(DIRS['eventos']):
+        if e.get('completado', 0):
+            continue
         f = str(e.get('fecha', ''))
         if f.startswith(prefix):
             try:
