@@ -5,6 +5,12 @@ from modules.utils import is_fetch, json_ok
 bp = Blueprint('restaurantes', __name__, url_prefix='/restaurantes')
 
 
+@bp.route('/')
+def index():
+    restaurantes = database.todos_los_restaurantes()
+    return render_template('restaurantes.html', restaurantes=restaurantes)
+
+
 @bp.route('/<int:restaurante_id>')
 def ver(restaurante_id):
     restaurante = next((r for r in database.todos_los_restaurantes() if r['id'] == restaurante_id), None)

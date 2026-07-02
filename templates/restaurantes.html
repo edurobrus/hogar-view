@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Restaurantes — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">🍽️</div>
+<h1 class="page-title">Restaurantes</h1>
+
+{% for r in restaurantes %}
+<a href="/restaurantes/{{ r.id }}" class="n-row" style="text-decoration:none; color:inherit;">
+  <span style="flex:1; font-size:14px;">{{ r.titulo or 'Sin título' }}</span>
+  <span style="font-size:12px; color:rgba(55,53,47,0.4);">{{ r.fecha_modificacion[:10] if r.fecha_modificacion else '' }}</span>
+</a>
+{% else %}
+<p style="color:rgba(55,53,47,0.4); font-size:14px;">Sin restaurantes. Usa el + del sidebar para crear uno.</p>
+{% endfor %}
+
+{% endblock %}

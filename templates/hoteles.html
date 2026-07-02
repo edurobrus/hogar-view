@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Hoteles — Mi Apartamento{% endblock %}
+{% block content %}
+
+<div class="page-icon">🏨</div>
+<h1 class="page-title">Hoteles</h1>
+
+{% for h in hoteles %}
+<a href="/hoteles/{{ h.id }}" class="n-row" style="text-decoration:none; color:inherit;">
+  <span style="flex:1; font-size:14px;">{{ h.titulo or 'Sin título' }}</span>
+  <span style="font-size:12px; color:rgba(55,53,47,0.4);">{{ h.fecha_modificacion[:10] if h.fecha_modificacion else '' }}</span>
+</a>
+{% else %}
+<p style="color:rgba(55,53,47,0.4); font-size:14px;">Sin hoteles. Usa el + del sidebar para crear uno.</p>
+{% endfor %}
+
+{% endblock %}

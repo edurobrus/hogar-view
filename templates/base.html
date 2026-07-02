@@ -535,14 +535,14 @@
 
 
     <!-- Hoteles -->
-    <div class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('hoteles') }}" onclick="toggleHoteles(event)">
+    <a href="/hoteles/" class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('hoteles') }}" onclick="toggleHoteles(event)" style="text-decoration:none; color:inherit;">
       <span class="nav-toggle" id="hoteles-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon">{{ svg_hotel|safe }}</span>
       <span style="flex:1;">Hoteles</span>
       <form method="POST" action="/hoteles/nuevo" onclick="event.stopPropagation()">
         <button type="submit" class="nav-add-btn">+</button>
       </form>
-    </div>
+    </a>
     <div id="hoteles-submenu" class="nav-submenu">
       {% for h in sidebar_hoteles %}
       <div class="nav-subitem-wrap">
@@ -559,14 +559,14 @@
     </div>
 
     <!-- Restaurantes -->
-    <div class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('restaurantes') }}" onclick="toggleRestaurantes(event)">
+    <a href="/restaurantes/" class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('restaurantes') }}" onclick="toggleRestaurantes(event)" style="text-decoration:none; color:inherit;">
       <span class="nav-toggle" id="restaurantes-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon">{{ svg_restaurante|safe }}</span>
       <span style="flex:1;">Restaurantes</span>
       <form method="POST" action="/restaurantes/nuevo" onclick="event.stopPropagation()">
         <button type="submit" class="nav-add-btn">+</button>
       </form>
-    </div>
+    </a>
     <div id="restaurantes-submenu" class="nav-submenu">
       {% for r in sidebar_restaurantes %}
       <div class="nav-subitem-wrap">
@@ -583,14 +583,14 @@
     </div>
 
     <!-- Francés -->
-    <div class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('frances') }}" onclick="toggleFrances(event)">
+    <a href="/frances/" class="nav-item nav-item-parent {{ 'active' if request.endpoint and request.endpoint.startswith('frances') }}" onclick="toggleFrances(event)" style="text-decoration:none; color:inherit;">
       <span class="nav-toggle" id="frances-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span class="nav-icon">{{ svg_frances|safe }}</span>
       <span style="flex:1;">Francés</span>
       <form method="POST" action="/frances/nuevo" onclick="event.stopPropagation()">
         <button type="submit" class="nav-add-btn">+</button>
       </form>
-    </div>
+    </a>
     <div id="frances-submenu" class="nav-submenu">
       {% for f in sidebar_frances %}
       <div class="nav-subitem-wrap">
