@@ -61,9 +61,15 @@ def _load(path: Path):
     except Exception:
         return None
 
+_INVISIBLE = re.compile('[​‌‍﻿ ]')
+
+def _clean(text: str) -> str:
+    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    return _INVISIBLE.sub('', text)
+
 def _save(directory: Path, filename: str, metadata: dict, content: str = ""):
     path = directory / filename
-    post = frontmatter.Post(content, **metadata)
+    post = frontmatter.Post(_clean(content), **metadata)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(frontmatter.dumps(post))
     return path

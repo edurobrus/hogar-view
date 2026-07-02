@@ -1,8 +1,8 @@
 ---
+fecha_creacion: '2026-07-02 00:00:00'
+fecha_modificacion: '2026-07-02 12:16:39'
 id: 3
-titulo: "Vocabulario de cocina"
-fecha_creacion: "2026-07-02 00:00:00"
-fecha_modificacion: "2026-07-02 00:00:00"
+titulo: Vocabulario de cocina
 ---
 
 ## Vocabulaire de cuisine professionnelle
@@ -39,7 +39,7 @@ fecha_modificacion: "2026-07-02 00:00:00"
 | Dégraisser | Desgrasar |
 | Flamber | Flambear |
 | Blanchir | Blanquear |
-| Reducer / Réduire | Reducir |
+| Réduire | Reducir |
 
 ---
 
@@ -70,4 +70,3 @@ fecha_modificacion: "2026-07-02 00:00:00"
 | C'est prêt ! | ¡Está listo! |
 | Il me faut X minutes. | Necesito X minutos. |
 | Je suis en retard sur la mise en place. | Voy retrasado en la mise en place. |
-

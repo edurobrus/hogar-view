@@ -1,368 +1,53 @@
 ---
 fecha_creacion: '2026-07-02 00:00:00'
-fecha_modificacion: '2026-07-02 12:01:04'
+fecha_modificacion: '2026-07-02 12:14:36'
 id: 2
 titulo: Llamar por teléfono para trabajo
 ---
 
-## Appeler pour un emploi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Inicio de llamada
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| Francés | Español |
-
-
-
-
-
-
-
-|---|---|
-
-
-
-
-
-
-
-| Bonjour, je m'appelle Eduardo. | Buenos días, me llamo Eduardo. |
-
-
-
-
-
-
-
-| Je vous appelle au sujet d'une offre d'emploi. | Le llamo sobre una oferta de empleo. |
-
-
-
-
-
-
-
-| Est-ce que je pourrais parler au responsable des ressources humaines ? | ¿Podría hablar con el responsable de RRHH? |
-
-
-
-
-
-
-
-| Est-ce que je pourrais parler au chef de cuisine ? | ¿Podría hablar con el jefe de cocina? |
-
-
-
-
-
-
-
-| Je vous appelle pour postuler à un poste dans votre établissement. | Le llamo para solicitar un puesto en su establecimiento. |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Preguntar por vacantes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| Francés | Español |
-
-
-
-
-
-
-
-|---|---|
-
-
-
-
-
-
-
-| Avez-vous des postes disponibles en ce moment ? | ¿Tienen puestos disponibles en este momento? |
-
-
-
-
-
-
-
-| Recherchez-vous du personnel en cuisine / en salle ? | ¿Buscan personal de cocina / sala? |
-
-
-
-
-
-
-
-| Je cherche un poste de cuisinier / commis / serveur. | Busco un puesto de cocinero / ayudante / camarero. |
-
-
-
-
-
-
-
-| Est-ce que vous recrutez actuellement ? | ¿Están contratando actualmente? |
-
-
-
-
-
-
-
-| Puis-je envoyer mon CV à votre attention ? | ¿Puedo enviarles mi CV? |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Pedir cita
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| Francés | Español |
-
-
-
-
-
-
-
-|---|---|
-
-
-
-
-
-
-
-| Est-ce que je pourrais venir vous rencontrer ? | ¿Podría venir a conocerles? |
-
-
-
-
-
-
-
-| Serait-il possible de fixer un rendez-vous ? | ¿Sería posible fijar una cita? |
-
-
-
-
-
-
-
-| Je suis disponible du lundi au vendredi. | Estoy disponible de lunes a viernes. |
-
-
-
-
-
-
-
-| À quelle heure vous convient-il ? | ¿A qué hora les viene bien? |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Despedida
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| Francés | Español |
-
-
-
-
-
-
-
-|---|---|
-
-
-
-
-
-
-
-| Merci beaucoup pour votre temps. | Muchas gracias por su tiempo. |
-
-
-
-
-
-
-
-| J'attends de vos nouvelles avec impatience. | Espero tener noticias suyas. |
-
-
-
-
-
-
-
-| Bonne journée ! | ¡Que tenga un buen día! |
+## Appeler pour un emploi
+
+---
+
+### Inicio de llamada
+
+| Franés | Español |
+|---|---|
+| Bonjour, je m'appelle Eduardo. | Buenos días, me llamo Eduardo. |
+| Je vous appelle au sujet d'une offre d'emploi. | Le llamo sobre una oferta de empleo. |
+| Est-ce que je pourrais parler au responsable des ressources humaines? | ¿Podría hablar con el responsable de RRHH? |
+| Est-ce que je pourrais parler au chef de cuisine? | ¿Podría hablar con el jefe de cocina? |
+| Je vous appelle pour postuler à un poste dans votre établissement. | Le llamo para solicitar un puesto en su establecimiento. |
+
+---
+
+### Preguntar por vacantes
+
+| Franés | Español |
+|---|---|
+| Avez-vous des postes disponibles en ce moment? | ¿Tienen puestos disponibles en este momento? |
+| Recherchez-vous du personnel en cuisine / en salle? | ¿Buscan personal de cocina / sala? |
+| Je cherche un poste de cuisinier / commis / serveur. | Busco un puesto de cocinero / ayudante / camarero. |
+| Est-ce que vous recrutez actuellement? | ¿Están contratando actualmente? |
+| Puis-je envoyer mon CV à votre attention? | ¿Puedo enviarles mi CV? |
+
+---
+
+### Pedir cita
+
+| Franés | Español |
+|---|---|
+| Est-ce que je pourrais venir vous rencontrer? | ¿Podría venir a conocerles? |
+| Serait-il possible de fixer un rendez-vous? | ¿Sería posible fijar una cita? |
+| Je suis disponible du lundi au vendredi. | Estoy disponible de lunes a viernes. |
+| À quelle heure vous convient-il? | ¿A qué hora les viene bien? |
+
+---
+
+### Despedida
+
+| Franés | Español |
+|---|---|
+| Merci beaucoup pour votre temps. | Muchas gracias por su tiempo. |
+| J'attends de vos nouvelles avec impatience. | Espero tener noticias suyas. |
+| Bonne journée! | ¡Que tenga un buen día! |
