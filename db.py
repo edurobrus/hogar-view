@@ -20,11 +20,14 @@ from pathlib import Path
 BASE = Path(__file__).parent / "data"
 
 DIRS = {
-    "tareas":   BASE / "_tareas",
-    "eventos":  BASE / "_eventos",
-    "recetas":  BASE / "_recetas",
-    "limpieza": BASE / "_limpieza",
-    "comida":   BASE / "comida",
+    "tareas":       BASE / "_tareas",
+    "eventos":      BASE / "_eventos",
+    "recetas":      BASE / "_recetas",
+    "limpieza":     BASE / "_limpieza",
+    "comida":       BASE / "comida",
+    "hoteles":      BASE / "_hoteles",
+    "restaurantes": BASE / "_restaurantes",
+    "frances":      BASE / "_frances",
 }
 
 # ── utilidades ────────────────────────────────────────────────────────────────
@@ -367,9 +370,12 @@ class SimpleCollection:
         _delete(self._dir, item_id)
 
 
-_recetas  = SimpleCollection('recetas',  'nueva-receta')
-_limpieza = SimpleCollection('limpieza', 'nueva-limpieza')
-_comida   = SimpleCollection('comida',   'nueva-comida')
+_recetas      = SimpleCollection('recetas',      'nueva-receta')
+_limpieza     = SimpleCollection('limpieza',     'nueva-limpieza')
+_comida       = SimpleCollection('comida',       'nueva-comida')
+_hoteles      = SimpleCollection('hoteles',      'nuevo-hotel')
+_restaurantes = SimpleCollection('restaurantes', 'nuevo-restaurante')
+_frances      = SimpleCollection('frances',      'nueva-ficha')
 
 # ── RECETAS ───────────────────────────────────────────────────────────────────
 
@@ -391,3 +397,24 @@ def todas_las_comidas() -> list[_DictRow]:  return _comida.all()
 def crear_comida(titulo, contenido) -> int:  return _comida.crear(titulo, contenido)
 def editar_comida(item_id, titulo, contenido): _comida.editar(item_id, titulo, contenido)
 def borrar_comida(item_id): _comida.borrar(item_id)
+
+# ── HOTELES ───────────────────────────────────────────────────────────────────
+
+def todos_los_hoteles() -> list[_DictRow]:  return _hoteles.all()
+def crear_hotel(titulo, contenido) -> int:  return _hoteles.crear(titulo, contenido)
+def editar_hotel(item_id, titulo, contenido): _hoteles.editar(item_id, titulo, contenido)
+def borrar_hotel(item_id): _hoteles.borrar(item_id)
+
+# ── RESTAURANTES ──────────────────────────────────────────────────────────────
+
+def todos_los_restaurantes() -> list[_DictRow]:  return _restaurantes.all()
+def crear_restaurante(titulo, contenido) -> int:  return _restaurantes.crear(titulo, contenido)
+def editar_restaurante(item_id, titulo, contenido): _restaurantes.editar(item_id, titulo, contenido)
+def borrar_restaurante(item_id): _restaurantes.borrar(item_id)
+
+# ── FRANCÉS ───────────────────────────────────────────────────────────────────
+
+def todas_las_frances() -> list[_DictRow]:  return _frances.all()
+def crear_frances(titulo, contenido) -> int:  return _frances.crear(titulo, contenido)
+def editar_frances(item_id, titulo, contenido): _frances.editar(item_id, titulo, contenido)
+def borrar_frances(item_id): _frances.borrar(item_id)

@@ -252,6 +252,54 @@
     {% endfor %}
     </div>
 
+    <!-- Hoteles -->
+    <div class="nav-item nav-parent {% if page.url contains '/hoteles' %}active{% endif %}" onclick="toggle('hoteles')">
+      <span class="nav-toggle open" id="arr-hoteles"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <a href="{{ site.baseurl }}/hoteles/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Hoteles</a>
+    </div>
+    <div id="sub-hoteles" class="nav-subitems">
+    {% assign hoteles_sidebar = site.hoteles | sort: "titulo" %}
+    {% for h in hoteles_sidebar %}
+    <a href="{{ h.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == h.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ h.titulo | default: h.title }}</span>
+    </a>
+    {% endfor %}
+    </div>
+
+    <!-- Restaurantes -->
+    <div class="nav-item nav-parent {% if page.url contains '/restaurantes' %}active{% endif %}" onclick="toggle('restaurantes')">
+      <span class="nav-toggle open" id="arr-restaurantes"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="8" x2="18" y2="21"/><line x1="6" y1="8" x2="6" y2="21"/><path d="M6 3v5a6 6 0 0 0 12 0V3"/></svg></span>
+      <a href="{{ site.baseurl }}/restaurantes/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Restaurantes</a>
+    </div>
+    <div id="sub-restaurantes" class="nav-subitems">
+    {% assign restaurantes_sidebar = site.restaurantes | sort: "titulo" %}
+    {% for r in restaurantes_sidebar %}
+    <a href="{{ r.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == r.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="8" x2="18" y2="21"/><line x1="6" y1="8" x2="6" y2="21"/><path d="M6 3v5a6 6 0 0 0 12 0V3"/></svg></span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.titulo | default: r.title }}</span>
+    </a>
+    {% endfor %}
+    </div>
+
+    <!-- Francés -->
+    <div class="nav-item nav-parent {% if page.url contains '/frances' %}active{% endif %}" onclick="toggle('frances')">
+      <span class="nav-toggle open" id="arr-frances"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <a href="{{ site.baseurl }}/frances/" style="flex:1; text-decoration:none; color:inherit;" onclick="event.stopPropagation()">Francés</a>
+    </div>
+    <div id="sub-frances" class="nav-subitems">
+    {% assign frances_sidebar = site.frances | sort: "titulo" %}
+    {% for f in frances_sidebar %}
+    <a href="{{ f.url | prepend: site.baseurl }}" class="nav-subitem {% if page.url == f.url %}active{% endif %}">
+      <span style="flex-shrink:0; opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+      <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ f.titulo | default: f.title }}</span>
+    </a>
+    {% endfor %}
+    </div>
+
   </aside>
 
   <script>
@@ -264,7 +312,7 @@
       document.getElementById('sidebar-overlay').classList.remove('open');
     }
 
-    const SECTIONS = ['tareas', 'eventos', 'recetas', 'limpieza'];
+    const SECTIONS = ['tareas', 'eventos', 'recetas', 'limpieza', 'hoteles', 'restaurantes', 'frances'];
 
     function toggle(id) {
       const sub = document.getElementById('sub-' + id);

@@ -18,6 +18,15 @@ collections:
   limpieza:
     output: true
     permalink: /limpieza/:name/
+  hoteles:
+    output: true
+    permalink: /hoteles/:name/
+  restaurantes:
+    output: true
+    permalink: /restaurantes/:name/
+  frances:
+    output: true
+    permalink: /frances/:name/
 
 defaults:
   - scope:
@@ -38,5 +47,20 @@ defaults:
   - scope:
       path: ""
       type: limpieza
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: hoteles
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: restaurantes
+    values:
+      layout: item
+  - scope:
+      path: ""
+      type: frances
     values:
       layout: item

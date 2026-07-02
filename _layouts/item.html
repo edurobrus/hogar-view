@@ -11,6 +11,9 @@ layout: default
   {% elsif page.collection == 'eventos' %}🕐
   {% elsif page.collection == 'recetas' %}🍳
   {% elsif page.collection == 'limpieza' %}🧹
+  {% elsif page.collection == 'hoteles' %}🏨
+  {% elsif page.collection == 'restaurantes' %}🍽️
+  {% elsif page.collection == 'frances' %}🇫🇷
   {% else %}📄{% endif %}
 </div>
 <h1 class="page-title">{{ page.titulo | default: page.title }}</h1>
